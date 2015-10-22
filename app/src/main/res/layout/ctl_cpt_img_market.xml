@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.cc.imagewithmarkersample.MyView
+        android:id="@+id/myviewid"
+        SrcLT="@drawable/red"
+        SrcRB="@drawable/green"
+        SrcRT="@drawable/green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:clickable="true" />
+</LinearLayout>

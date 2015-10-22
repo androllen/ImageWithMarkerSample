@@ -20,13 +20,15 @@ import java.util.List;
 /**
  * Created by androllen on 2015/9/29.
  */
-public class ArrayViewGroup extends FrameLayout {
+public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener{
 
     private LayoutInflater mInflater;
     private FrameLayout mMainContainer;
     private RelativeLayout mImgContainer;
     private List<IListItem> mItemList;
     private int mIndexController = 0;
+
+    private DragImageView mDragImageView;
 
     /** 移动的偏移量  */
     private int mMoveDeltX = 0;
@@ -144,6 +146,10 @@ public class ArrayViewGroup extends FrameLayout {
         mItemList.add(new ImgItem(drawable, title));
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return true;
+    }
 
     public void commit() {
         mIndexController = 0;
@@ -152,6 +158,7 @@ public class ArrayViewGroup extends FrameLayout {
             tempItemView = mInflater.inflate(R.layout.ctl_cpt_img_item, null);
             setupItem(tempItemView, obj, mIndexController);
             mImgContainer.addView(tempItemView);
+
             mIndexController++;
         }
     }

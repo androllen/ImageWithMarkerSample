@@ -26,6 +26,7 @@
         </FrameLayout>
 
         <ImageView
+            android:id="@+id/iv_lefttopid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -33,6 +34,7 @@
             android:src="@drawable/red" />
 
         <ImageView
+            android:id="@+id/iv_rightbottomid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
