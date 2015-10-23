@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -75,6 +76,11 @@ public class MyView extends View {
     }
 
     @Override
+    protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.GRAY);
@@ -119,8 +125,31 @@ public class MyView extends View {
         canvas.drawBitmap(mBitmap, RB_X, RB_Y, paint);
     }
 
+    public static Bitmap rotate(Bitmap b, int degrees) {
+        if (degrees != 0 && b != null) {
+            Matrix m = new Matrix();
+            m.setRotate(degrees,
+                    (float) b.getWidth() / 2, (float) b.getHeight() / 2);
+            try {
+                Bitmap b2 = Bitmap.createBitmap(
+                        b, 0, 0, b.getWidth(), b.getHeight(), m, true);
+                if (b != b2) {
+                    b.recycle();  //Android开发网再次提示Bitmap操作完应该显示的释放
+                    b = b2;
+                }
+            } catch (OutOfMemoryError ex) {
+                // 建议大家如何出现了内存不足异常，最好return 原始的bitmap对象。.
+            }
+        }
+        return b;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if(!this.isClickable())
+            return super.onTouchEvent(event);
+
         int action = event.getAction();
         boolean isTouch=false;
         /*
@@ -128,6 +157,7 @@ public class MyView extends View {
          */
         int x = (int) event.getX();
         int y = (int) event.getY();
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 x0 = x;

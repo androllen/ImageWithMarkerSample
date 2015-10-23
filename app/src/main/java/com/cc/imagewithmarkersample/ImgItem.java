@@ -3,7 +3,7 @@ package com.cc.imagewithmarkersample;
 /**
  * Created by androllen on 2015/9/29.
  */
-public class ImgItem implements ArrayViewGroup.IListItem {
+public class ImgItem implements IListItem {
 
     private boolean mClickable=true;
     private String mTitle;

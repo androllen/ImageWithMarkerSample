@@ -10,6 +10,12 @@
         <!--android:layout_width="fill_parent"-->
         <!--android:layout_height="fill_parent"-->
         <!--android:background="@color/yellow"/>-->
+   <com.cc.imagewithmarkersample.UITableView
+       android:id="@+id/tableView"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent">
+   </com.cc.imagewithmarkersample.UITableView>
+
     <!--<com.cc.imagewithmarkersample.CoordinatesView-->
        <!--android:layout_width="fill_parent"-->
         <!--android:layout_height="400dip" />-->
@@ -17,22 +23,22 @@
 
 
 
-    <com.cc.imagewithmarkersample.MyView
-        android:id="@+id/myviewid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        SrcLT="@drawable/red"
-        SrcRT="@drawable/green"
-        SrcRB="@drawable/green" />
+    <!--<com.cc.imagewithmarkersample.MyView-->
+        <!--android:id="@+id/myviewid"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--SrcLT="@drawable/red"-->
+        <!--SrcRT="@drawable/green"-->
+        <!--SrcRB="@drawable/green" />-->
 
-    <com.cc.imagewithmarkersample.MyView
-        android:id="@+id/myviewids"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerHorizontal="true"
-        SrcLT="@drawable/red"
-        SrcRT="@drawable/green"
-        SrcRB="@drawable/green"/>
+    <!--<com.cc.imagewithmarkersample.MyView-->
+        <!--android:id="@+id/myviewids"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="10dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--SrcLT="@drawable/red"-->
+        <!--SrcRT="@drawable/green"-->
+        <!--SrcRB="@drawable/green"/>-->
 </RelativeLayout>

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by androllen on 2015/9/29.
  */
-public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener{
+public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener ,View.OnFocusChangeListener{
 
     private LayoutInflater mInflater;
     private FrameLayout mMainContainer;
@@ -59,7 +59,7 @@ public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener{
                 ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
         addView(mMainContainer, params);
-        mImgContainer = (RelativeLayout) findViewById(R.id.imgContainer);
+        mImgContainer = (RelativeLayout) findViewById(R.id.buttonsContainer);
         mMoveLength=480;
     }
 
@@ -142,7 +142,12 @@ public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener{
         return true;
     }
 
-     public void addBasicItem(int drawable, String title) {
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+
+    }
+
+    public void addBasicItem(int drawable, String title) {
         mItemList.add(new ImgItem(drawable, title));
     }
 
@@ -174,6 +179,8 @@ public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener{
         if (item.getDrawable() > -1) {
             ((ImageView) view.findViewById(R.id.iv_appicon)).setBackgroundResource(item.getDrawable());
         }
+
+        view.setOnFocusChangeListener(this);
     }
 
     /**
@@ -263,11 +270,5 @@ public class ArrayViewGroup extends FrameLayout implements View.OnTouchListener{
         }
     }
 
-    public interface IListItem {
 
-        public boolean isClickable();
-
-        public void setClickable(boolean clickable);
-
-    }
 }

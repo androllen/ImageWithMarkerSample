@@ -22,12 +22,12 @@ import java.util.List;
 /**
  * Created by androllen on 15/10/20.
  */
-public class ArrayView extends RelativeLayout implements View.OnTouchListener {
+public class ArrayView extends RelativeLayout {
 
     private LayoutInflater mInflater;
     private FrameLayout mMainContainer;
     private RelativeLayout mImgContainer;
-    private List<ArrayViewGroup.IListItem> mItemList;
+    private List<IListItem> mItemList;
     private int mIndexController = 0;
 
     public ArrayView(Context context) {
@@ -37,6 +37,7 @@ public class ArrayView extends RelativeLayout implements View.OnTouchListener {
     public ArrayView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        mItemList = new ArrayList<IListItem>();
 
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMainContainer = (FrameLayout) mInflater.inflate(R.layout.ctl_cpt_btn_list_container, null);
@@ -44,7 +45,7 @@ public class ArrayView extends RelativeLayout implements View.OnTouchListener {
                 ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
         addView(mMainContainer, params);
-        mImgContainer = (RelativeLayout) findViewById(R.id.imgContainer);
+        mImgContainer = (RelativeLayout) findViewById(R.id.buttonsContainer);
 
     }
 
@@ -52,24 +53,20 @@ public class ArrayView extends RelativeLayout implements View.OnTouchListener {
         mItemList.add(new ImgItem(drawable, title));
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return false;
-    }
-
     public void commit() {
         mIndexController = 0;
-        for (ArrayViewGroup.IListItem obj : mItemList) {
+        for (IListItem obj : mItemList) {
             View tempItemView;
-            tempItemView = mInflater.inflate(R.layout.ctl_cpt_img_market, null);
+            tempItemView = mInflater.inflate(R.layout.ctl_cpt_img_item, null);
             setupItem(tempItemView, obj, mIndexController);
+            tempItemView.setClickable(obj.isClickable());
             mImgContainer.addView(tempItemView);
-            tempItemView.setOnTouchListener(this);
+
             mIndexController++;
         }
     }
 
-    private void setupItem(View view, ArrayViewGroup.IListItem item, int index) {
+    private void setupItem(View view, IListItem item, int index) {
         if (item instanceof ImgItem) {
             ImgItem tempItem = (ImgItem) item;
             setupImgItem(view, tempItem, index);
@@ -77,8 +74,20 @@ public class ArrayView extends RelativeLayout implements View.OnTouchListener {
     }
 
     private void setupImgItem(View view, ImgItem item, int index) {
-        MyView myView =(MyView)view;
-        myView.setImageBitmap(ReadBitmapById(getContext(),item.getDrawable()));
+        if (item.getDrawable() > -1) {
+            ((ImageView) view.findViewById(R.id.iv_appicon)).setBackgroundResource(item.getDrawable());
+        }
+        view.setTag(index);
+        if (item.isClickable()) {
+            view.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                }
+
+            });
+        }
     }
 
     /***
