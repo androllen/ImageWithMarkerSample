@@ -23,7 +23,7 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
 
     private ArrayViewGroup mArrayViewGroup;
     private UITableView tableView;
-
+    private ArrayView arrayView;
     private MyView myView;
     private MyView myView1;
     @Override
@@ -53,26 +53,36 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
 
 
 
-        tableView = (UITableView) findViewById(R.id.tableView);
+//        tableView = (UITableView) findViewById(R.id.tableView);
+//
+//        createList();
+//
+//        Log.d("MainActivity", "total items: " + tableView.getCount());
+//
+//        tableView.commit();
 
-        createList();
+        arrayView = (ArrayView) findViewById(R.id.arrayView);
 
-        Log.d("MainActivity", "total items: " + tableView.getCount());
 
-        tableView.commit();
+        arrayView.addBasicItem(R.drawable.flowers);
+        arrayView.addBasicItem(R.drawable.pic_h1_2);
+
+        Log.d("MainActivity", "total items: " + arrayView.getCount());
+
     }
-    private void createList() {
-        CustomClickListener listener = new CustomClickListener();
-        tableView.setClickListener(listener);
-        tableView.addBasicItem(R.drawable.flowers, "Example 1", "Summary text 1");
-        tableView.addBasicItem(R.drawable.pic_h1_2, "Example 3", "Summary text 3");
-    }
 
-    private class CustomClickListener implements UITableView.ClickListener {
+//    private void createList() {
+//        CustomClickListener listener = new CustomClickListener();
+//        tableView.setClickListener(listener);
+//        tableView.addBasicItem(R.drawable.flowers, "Example 1", "Summary text 1");
+//        tableView.addBasicItem(R.drawable.pic_h1_2, "Example 3", "Summary text 3");
+//    }
+
+    private class CustomClickListener implements ClickListener {
 
         @Override
         public void onClick(int index) {
-            Toast.makeText(MainActivity.this,"",Toast.LENGTH_SHORT);
+
         }
 
     }

@@ -10,11 +10,19 @@
         <!--android:layout_width="fill_parent"-->
         <!--android:layout_height="fill_parent"-->
         <!--android:background="@color/yellow"/>-->
-   <com.cc.imagewithmarkersample.UITableView
-       android:id="@+id/tableView"
-       android:layout_width="fill_parent"
-       android:layout_height="fill_parent">
-   </com.cc.imagewithmarkersample.UITableView>
+   <!--<com.cc.imagewithmarkersample.UITableView-->
+       <!--android:id="@+id/tableView"-->
+       <!--android:layout_width="fill_parent"-->
+       <!--android:layout_height="fill_parent">-->
+   <!--</com.cc.imagewithmarkersample.UITableView>-->
+
+    <com.cc.imagewithmarkersample.ArrayView
+
+        android:id="@+id/arrayView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    </com.cc.imagewithmarkersample.ArrayView>
 
     <!--<com.cc.imagewithmarkersample.CoordinatesView-->
        <!--android:layout_width="fill_parent"-->

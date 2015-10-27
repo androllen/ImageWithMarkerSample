@@ -24,11 +24,14 @@ import java.util.List;
  */
 public class ArrayView extends RelativeLayout {
 
+    private int mIndexController = 0;
     private LayoutInflater mInflater;
     private FrameLayout mMainContainer;
-    private RelativeLayout mImgContainer;
+    private RelativeLayout mListContainer;
     private List<IListItem> mItemList;
-    private int mIndexController = 0;
+    private List<ArrayImg> myViewList;
+
+    private ClickListener mClickListener;
 
     public ArrayView(Context context) {
         super(context);
@@ -38,97 +41,80 @@ public class ArrayView extends RelativeLayout {
         super(context, attrs);
 
         mItemList = new ArrayList<IListItem>();
-
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMainContainer = (FrameLayout) mInflater.inflate(R.layout.ctl_cpt_btn_list_container, null);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.FILL_PARENT,
-                ViewGroup.LayoutParams.FILL_PARENT);
+        mMainContainer = (FrameLayout)  mInflater.inflate(R.layout.ctl_cpt_btn_list_container, null);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
         addView(mMainContainer, params);
-        mImgContainer = (RelativeLayout) findViewById(R.id.buttonsContainer);
+        mListContainer = (RelativeLayout) mMainContainer.findViewById(R.id.buttonsContainer);
 
     }
 
-    public void addBasicItem(int drawable, String title) {
-        mItemList.add(new ImgItem(drawable, title));
+    private ArrayImg addArrayImg(int drawable){
+        ArrayImg myView =new ArrayImg(getContext());
+        Bitmap bmp1 = Utils.ReadBitmapById(getContext(), drawable);
+        myView.mImage.setImageBitmap(bmp1);
+
+//        View tempItemView;
+//        tempItemView = mInflater.inflate(R.layout.ctl_cpt_img_item, this,true);
+//
+//        ArrayImg myView=(ArrayView)tempItemView;
+//
+//        if (item.getDrawable() > -1) {
+//            ((ImageView) view.findViewById(R.id.iv_appicon)).setBackgroundResource(item.getDrawable());
+//        }
+        return myView;
     }
 
-    public void commit() {
-        mIndexController = 0;
-        for (IListItem obj : mItemList) {
-            View tempItemView;
-            tempItemView = mInflater.inflate(R.layout.ctl_cpt_img_item, null);
-            setupItem(tempItemView, obj, mIndexController);
-            tempItemView.setClickable(obj.isClickable());
-            mImgContainer.addView(tempItemView);
+    public void addBasicItem(int drawable) {
 
-            mIndexController++;
+        ArrayImg myView = addArrayImg(drawable);
+        CustomClickListener listener = new CustomClickListener();
+        myView.setOnTouchListener(listener);
+//        myView.setFocusable(true);
+        myView.setFocusableInTouchMode(true);
+
+        mListContainer.addView(myView);
+
+    }
+
+    private class CustomClickListener implements OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ArrayImg img=(ArrayImg)v;
+            return false;
         }
     }
 
-    private void setupItem(View view, IListItem item, int index) {
-        if (item instanceof ImgItem) {
-            ImgItem tempItem = (ImgItem) item;
-            setupImgItem(view, tempItem, index);
-        }
-    }
-
-    private void setupImgItem(View view, ImgItem item, int index) {
-        if (item.getDrawable() > -1) {
-            ((ImageView) view.findViewById(R.id.iv_appicon)).setBackgroundResource(item.getDrawable());
-        }
-        view.setTag(index);
-        if (item.isClickable()) {
-            view.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-
-                }
-
-            });
-        }
-    }
-
-    /***
-     * 根据资源文件获取Bitmap
+    /**
      *
-     * @param context
-     * @param drawableId
      * @return
      */
-    public static Bitmap ReadBitmapById(Context context, int drawableId) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        options.inInputShareable = true;
-        options.inPurgeable = true;
-        InputStream stream = context.getResources().openRawResource(drawableId);
-        Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
-        return getBitmap(bitmap, 100, 100);
+    public int getCount() {
+        return mItemList.size();
     }
 
-    /***
-     * 等比例压缩图片
+    /**
      *
-     * @param bitmap
-     * @param screenWidth
-     * @param screenHight
-     * @return
      */
-    public static Bitmap getBitmap(Bitmap bitmap, int screenWidth,
-                                   int screenHight) {
-        int w = bitmap.getWidth();
-        int h = bitmap.getHeight();
-        Log.e("jj", "图片宽度" + w + ",screenWidth=" + screenWidth);
-        Matrix matrix = new Matrix();
-        float scale = (float) screenWidth / w;
-        float scale2 = (float) screenHight / h;
-
-        // scale = scale < scale2 ? scale : scale2;
-
-        // 保证图片不变形.
-        matrix.postScale(scale, scale);
-        // w,h是原图的属性.
-        return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+    public void clear() {
+        mItemList.clear();
+        mListContainer.removeAllViews();
     }
+
+    /**
+     *
+     * @param listener
+     */
+    public void setClickListener(ClickListener listener) {
+        this.mClickListener = listener;
+    }
+
+    /**
+     *
+     */
+    public void removeClickListener() {
+        this.mClickListener = null;
+    }
+
 }
