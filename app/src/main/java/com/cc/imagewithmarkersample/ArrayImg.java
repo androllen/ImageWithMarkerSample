@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by androllen on 15/10/16.
  */
-public class ArrayImg extends RelativeLayout {
+public class ArrayImg extends View {
     private static final String TAG = "ArrayImg";
     private ImageView mImageLt;
     public ImageView mImage;
@@ -56,10 +56,10 @@ public class ArrayImg extends RelativeLayout {
 
     public ArrayImg(Context context, AttributeSet attrs) {
         super(context, attrs);
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = inflater.inflate(R.layout.ctl_cpt_img_item, null);  //继承的是 View
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.ctl_cpt_img_item, null);  //继承的是 View
 
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.ctl_cpt_img_item, this, true);//RelativeLayout
+//        View view = LayoutInflater.from(getContext()).inflate(R.layout.ctl_cpt_img_item, this, true);//RelativeLayout
 
         mImageLt = (ImageView) view.findViewById(R.id.iv_lefttopid);
         mImageRb = (ImageView) view.findViewById(R.id.iv_rightbottomid);

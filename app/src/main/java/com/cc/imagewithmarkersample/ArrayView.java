@@ -23,23 +23,23 @@ import java.util.List;
  * Created by androllen on 15/10/20.
  */
 public class ArrayView extends RelativeLayout {
-
+    private static final String TAG = "ArrayView";
     private int mIndexController = 0;
     private LayoutInflater mInflater;
     private FrameLayout mMainContainer;
     private RelativeLayout mListContainer;
     private List<IListItem> mItemList;
     private List<ArrayImg> myViewList;
-
+    private Context mContext;
     private ClickListener mClickListener;
-
+    private int startX, startY;
     public ArrayView(Context context) {
         super(context);
     }
 
     public ArrayView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        mContext=context;
         mItemList = new ArrayList<IListItem>();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMainContainer = (FrameLayout)  mInflater.inflate(R.layout.ctl_cpt_btn_list_container, null);
@@ -54,18 +54,35 @@ public class ArrayView extends RelativeLayout {
         Bitmap bmp1 = Utils.ReadBitmapById(getContext(), drawable);
         myView.mImage.setImageBitmap(bmp1);
 
-//        View tempItemView;
-//        tempItemView = mInflater.inflate(R.layout.ctl_cpt_img_item, this,true);
-//
-//        ArrayImg myView=(ArrayView)tempItemView;
-//
-//        if (item.getDrawable() > -1) {
-//            ((ImageView) view.findViewById(R.id.iv_appicon)).setBackgroundResource(item.getDrawable());
-//        }
         return myView;
     }
+    public void addBasicItem(int drawable){
 
-    public void addBasicItem(int drawable) {
+        View view=mInflater.inflate(R.layout.ctl_cpt_img_item,null);
+
+        CustomClickListener listener = new CustomClickListener();
+        RelativeLayout layout =(RelativeLayout)view.findViewById(R.id.dragctrl);
+        layout.setOnTouchListener(listener);
+
+
+
+        ImageView imageView=(ImageView) view.findViewById(R.id.iv_appicon);
+//        Bitmap bmp1 = Utils.ReadBitmapById(getContext(), drawable);
+        imageView.setImageResource(drawable);
+//        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+
+        ImageView imageView_tb=(ImageView) view.findViewById(R.id.iv_rightbottomid);
+        CustomImageViewClickListener listener1=new CustomImageViewClickListener();
+        imageView_tb.setOnTouchListener(listener1);
+
+        RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+        lp2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        lp2.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+        mListContainer.addView(view,lp2);
+
+    }
+    public void addBasicItems(int drawable) {
 
         ArrayImg myView = addArrayImg(drawable);
         CustomClickListener listener = new CustomClickListener();
@@ -81,8 +98,72 @@ public class ArrayView extends RelativeLayout {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            ArrayImg img=(ArrayImg)v;
-            return false;
+            Log.d(TAG, "onTouch ");
+
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:// 手指按下时
+                    startX = x;
+                    startY = y;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+
+                    int l = v.getLeft();
+                    int r = v.getRight();
+                    int t = v.getTop();
+                    int b = v.getBottom();
+
+                    int Bitmap_X = x - startX;
+                    int Bitmap_Y = y - startY;
+
+                    int nl = l + Bitmap_X;
+                    int nr = r + Bitmap_X;
+                    int nt = t + Bitmap_Y;
+                    int nb = b + Bitmap_Y;
+
+                    v.layout(nl, nt, nr, nb);
+//							invalidate();
+                    break;
+            }
+            return true;
+        }
+    }
+
+    private class CustomImageViewClickListener implements OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            Log.d(TAG, "onTouch ");
+
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:// 手指按下时
+                    startX = x;
+                    startY = y;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+
+                    int l = v.getLeft();
+                    int r = v.getRight();
+                    int t = v.getTop();
+                    int b = v.getBottom();
+
+                    int Bitmap_X = x - startX;
+                    int Bitmap_Y = y - startY;
+
+                    int nl = l + Bitmap_X;
+                    int nr = r + Bitmap_X;
+                    int nt = t + Bitmap_Y;
+                    int nb = b + Bitmap_Y;
+
+                    v.layout(nl, nt, nr, nb);
+//							invalidate();
+                    break;
+            }
+            return true;
         }
     }
 
