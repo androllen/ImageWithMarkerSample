@@ -5,14 +5,20 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends Activity {//implements View.OnFocusChangeListener{
@@ -26,23 +32,12 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
     private ArrayView arrayView;
     private MyView myView;
     private MyView myView1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_main);
 
-
-//        ImageView imgView = (ImageView) findViewById(R.id.image);
-//        StickerView stickerView = new StickerView(this);
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT);
-//        params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.image);
-//        params.addRule(RelativeLayout.ALIGN_TOP, R.id.image);
-//        ((ViewGroup)imgView.getParent()).addView(stickerView, params);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-//        stickerView.setWaterMark(bitmap);
-//        ((ViewGroup)imgView.getParent()).addView(stickerView1, params);
 
 
 //        myView=(MyView)findViewById(R.id.myviewid);
@@ -65,7 +60,6 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
 //        mArrayViewGroup.commit();
 
 
-
 //        tableView = (UITableView) findViewById(R.id.tableView);
 //
 //        createList();
@@ -84,21 +78,14 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
 
     }
 
-//    private void createList() {
+    //    private void createList() {
 //        CustomClickListener listener = new CustomClickListener();
 //        tableView.setClickListener(listener);
 //        tableView.addBasicItem(R.drawable.flowers, "Example 1", "Summary text 1");
 //        tableView.addBasicItem(R.drawable.pic_h1_2, "Example 3", "Summary text 3");
 //    }
 
-    private class CustomClickListener implements ClickListener {
 
-        @Override
-        public void onClick(int index) {
-
-        }
-
-    }
 
 //    @Override
 //    public void onFocusChange(View v, boolean hasFocus) {

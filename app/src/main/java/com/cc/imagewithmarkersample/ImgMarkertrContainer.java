@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -18,7 +19,7 @@ import android.widget.RelativeLayout;
  * Created by androllen on 15/10/29.
  */
 @SuppressLint("NewApi")
-public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListener {
+public class ImgMarkertrContainer extends RelativeLayout {
 
     private Context mContext;
     private static final int CLICKRANGE = 5;
@@ -35,17 +36,33 @@ public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListe
     public ImgMarkertrContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+
     }
 
     private void init() {
 
-        this.setOnTouchListener(this);
+//        this.setOnTouchListener(this);
+
+
+        StickerView stickerView = new StickerView(getContext());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.image);
+        params.addRule(RelativeLayout.ALIGN_TOP, R.id.image);
+        StickerView stickerView1 = new StickerView(getContext());
+        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.hat_14);
+        stickerView1.setWaterMark(bitmap1);
+        this.addView(stickerView1, params);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.flowers);
+        stickerView.setWaterMark(bitmap);
+        this.addView(stickerView, params);
 
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        boolean isTouch=false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startX = (int) event.getX();
@@ -56,19 +73,23 @@ public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListe
                     startTouchViewLeft = touchView.getLeft();
                     startTouchViewTop = touchView.getTop();
                 } else {
-                    addItem(startX, startY);
+//                    addItem(startX, startY);
                 }
-
+                isTouch=true;
                 break;
             case MotionEvent.ACTION_MOVE:
-                moveView((int) event.getX(),(int) event.getY());
+                //moveView((int) event.getX(),(int) event.getY());
+                isTouch=false;
+
                 break;
             case MotionEvent.ACTION_UP:
                 break;
         }
 
-        return true;
+        return super.dispatchTouchEvent(event);
     }
+
+
 
     private void addItem(int x, int y) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -77,7 +98,7 @@ public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListe
         int imgWidth=ImgMarker.getViewWidth();
         ImgMarker view = null;
         if (x + imgWidth > screenWidth) {
-            params.leftMargin = screenWidth - ImgMarker.getViewWidth()-100;
+            params.leftMargin = screenWidth - ImgMarker.getViewWidth();
             view = new ImgMarker(getContext());
         } else {
             params.leftMargin = x;
@@ -90,7 +111,7 @@ public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListe
             params.topMargin =0;
         }
         else if((params.topMargin+ImgMarker.getViewHeight())>getHeight()){
-            params.topMargin = getHeight() - ImgMarker.getViewHeight()-100;
+            params.topMargin = getHeight() - ImgMarker.getViewHeight();
         }
 
 
@@ -100,14 +121,22 @@ public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListe
         this.addView(view, params);
     }
 
+
+
     private void moveView(int x, int y) {
         if (touchView == null) return;
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.leftMargin = x - startX + startTouchViewLeft;
         params.topMargin = y - startY + startTouchViewTop;
         //限制子控件移动必须在视图范围内
-        if(params.leftMargin<0||(params.leftMargin+touchView.getWidth())>getWidth())params.leftMargin = touchView.getLeft();
-        if(params.topMargin<0||(params.topMargin+touchView.getHeight())>getHeight())params.topMargin = touchView.getTop();
+        int left=touchView.getLeft();
+        int right=touchView.getRight();
+        if(params.leftMargin<0||(params.leftMargin+touchView.getWidth())>getWidth()){
+            params.leftMargin = left;
+        }
+        if(params.topMargin<0||(params.topMargin+touchView.getHeight())>getHeight()){
+            params.topMargin = right;
+        }
         touchView.setLayoutParams(params);
     }
 
@@ -127,7 +156,7 @@ public class ImgMarkertrContainer extends RelativeLayout implements OnTouchListe
             if (contains) {
                 touchView = view;
                 touchView.bringToFront();
-                return true;
+                return false;
             }
         }
         touchView = null;

@@ -34,7 +34,6 @@
     <com.cc.imagewithmarkersample.ImgMarkertrContainer
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-
     </com.cc.imagewithmarkersample.ImgMarkertrContainer>
 
     <!--<com.cc.imagewithmarkersample.CoordinatesView-->
@@ -60,4 +59,5 @@
     <!--SrcLT="@drawable/red"-->
     <!--SrcRT="@drawable/green"-->
     <!--SrcRB="@drawable/green"/>-->
+
 </RelativeLayout>
