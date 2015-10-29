@@ -32,6 +32,19 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
         setContentView(R.layout.aty_main);
 
 
+//        ImageView imgView = (ImageView) findViewById(R.id.image);
+//        StickerView stickerView = new StickerView(this);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT);
+//        params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.image);
+//        params.addRule(RelativeLayout.ALIGN_TOP, R.id.image);
+//        ((ViewGroup)imgView.getParent()).addView(stickerView, params);
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//        stickerView.setWaterMark(bitmap);
+//        ((ViewGroup)imgView.getParent()).addView(stickerView1, params);
+
+
 //        myView=(MyView)findViewById(R.id.myviewid);
 //        Bitmap bmp = ReadBitmapById(this, R.drawable.flowers);
 //        // 设置图片
@@ -61,13 +74,13 @@ public class MainActivity extends Activity {//implements View.OnFocusChangeListe
 //
 //        tableView.commit();
 
-        arrayView = (ArrayView) findViewById(R.id.arrayView);
-
-
-        arrayView.addBasicItem(R.drawable.flowers);
-        arrayView.addBasicItem(R.drawable.pic_h1_2);
-
-        Log.d("MainActivity", "total items: " + arrayView.getCount());
+//        arrayView = (ArrayView) findViewById(R.id.arrayView);
+//
+//
+//        arrayView.addBasicItem(R.drawable.flowers);
+//        arrayView.addBasicItem(R.drawable.pic_h1_2);
+//
+//        Log.d("MainActivity", "total items: " + arrayView.getCount());
 
     }
 

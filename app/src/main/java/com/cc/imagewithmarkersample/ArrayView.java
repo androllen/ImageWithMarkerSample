@@ -71,9 +71,14 @@ public class ArrayView extends RelativeLayout {
         imageView.setImageResource(drawable);
 //        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
+        //fl_marker
+        CustomImageViewClickListener listener1=new CustomImageViewClickListener();
+
+
+//        FrameLayout frameLayout=(FrameLayout)view.findViewById(R.id.fl_marker);
+//        frameLayout.setOnTouchListener(listener1);
 
         ImageView imageView_tb=(ImageView) view.findViewById(R.id.iv_rightbottomid);
-        CustomImageViewClickListener listener1=new CustomImageViewClickListener();
         imageView_tb.setOnTouchListener(listener1);
 
         RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
@@ -123,7 +128,6 @@ public class ArrayView extends RelativeLayout {
                     int nb = b + Bitmap_Y;
 
                     v.layout(nl, nt, nr, nb);
-//							invalidate();
                     break;
             }
             return true;
@@ -134,7 +138,11 @@ public class ArrayView extends RelativeLayout {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-
+//            View view = mListContainer.findFocus();
+//            ImageView frameLayou=(ImageView)v;
+//            if (frameLayou==view){
+//
+//            }
             Log.d(TAG, "onTouch ");
 
             int x = (int) event.getX();
@@ -159,8 +167,8 @@ public class ArrayView extends RelativeLayout {
                     int nt = t + Bitmap_Y;
                     int nb = b + Bitmap_Y;
 
+
                     v.layout(nl, nt, nr, nb);
-//							invalidate();
                     break;
             }
             return true;

@@ -6,47 +6,58 @@
 
 
     <!--<com.cc.imagewithmarkersample.ArrayViewGroup-->
-        <!--android:id="@+id/vg_bg"-->
+    <!--android:id="@+id/vg_bg"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:background="@color/yellow"/>-->
+    <!--<com.cc.imagewithmarkersample.UITableView-->
+    <!--android:id="@+id/tableView"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent">-->
+    <!--</com.cc.imagewithmarkersample.UITableView>-->
+
+    <!--<com.cc.imagewithmarkersample.ArrayView-->
+
+    <!--android:id="@+id/arrayView"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent">-->
+
+    <!--</com.cc.imagewithmarkersample.ArrayView>-->
+
+    <!--<com.cc.imagewithmarkersample.PictureTagLayout-->
+        <!--android:background="@color/light_transparent"-->
         <!--android:layout_width="fill_parent"-->
         <!--android:layout_height="fill_parent"-->
-        <!--android:background="@color/yellow"/>-->
-   <!--<com.cc.imagewithmarkersample.UITableView-->
-       <!--android:id="@+id/tableView"-->
-       <!--android:layout_width="fill_parent"-->
-       <!--android:layout_height="fill_parent">-->
-   <!--</com.cc.imagewithmarkersample.UITableView>-->
+        <!--android:layout_centerHorizontal="true">-->
+    <!--</com.cc.imagewithmarkersample.PictureTagLayout>-->
 
-    <com.cc.imagewithmarkersample.ArrayView
-
-        android:id="@+id/arrayView"
+    <com.cc.imagewithmarkersample.ImgMarkertrContainer
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-    </com.cc.imagewithmarkersample.ArrayView>
+    </com.cc.imagewithmarkersample.ImgMarkertrContainer>
 
     <!--<com.cc.imagewithmarkersample.CoordinatesView-->
-       <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="400dip" />-->
-
-
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="400dip" />-->
 
 
     <!--<com.cc.imagewithmarkersample.MyView-->
-        <!--android:id="@+id/myviewid"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--SrcLT="@drawable/red"-->
-        <!--SrcRT="@drawable/green"-->
-        <!--SrcRB="@drawable/green" />-->
+    <!--android:id="@+id/myviewid"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--SrcLT="@drawable/red"-->
+    <!--SrcRT="@drawable/green"-->
+    <!--SrcRB="@drawable/green" />-->
 
     <!--<com.cc.imagewithmarkersample.MyView-->
-        <!--android:id="@+id/myviewids"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:padding="10dp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--SrcLT="@drawable/red"-->
-        <!--SrcRT="@drawable/green"-->
-        <!--SrcRB="@drawable/green"/>-->
+    <!--android:id="@+id/myviewids"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:padding="10dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--SrcLT="@drawable/red"-->
+    <!--SrcRT="@drawable/green"-->
+    <!--SrcRB="@drawable/green"/>-->
 </RelativeLayout>
