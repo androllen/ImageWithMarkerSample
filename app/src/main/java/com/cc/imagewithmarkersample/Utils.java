@@ -13,7 +13,7 @@ import java.io.InputStream;
  */
 public class Utils {
 
-
+    private static final String TAG = "Utils";
     /***
      * 根据资源文件获取Bitmap
      *
@@ -48,11 +48,19 @@ public class Utils {
         float scale = (float) screenWidth / w;
         float scale2 = (float) screenHight / h;
 
+        Log.d(TAG, "getBitmap height:" +screenHight +" width:"+screenWidth);
         // scale = scale < scale2 ? scale : scale2;
+        // h>>1  same as (...)/2
 
         // 保证图片不变形.
         matrix.postScale(scale, scale);
         // w,h是原图的属性.
         return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+    }
+
+    public static Bitmap ReadBitmapByScreenRect(Context context, Bitmap bitmap,  int screenWidth,
+                                        int screenHight) {
+
+        return getBitmap(bitmap, screenWidth, screenHight);
     }
 }

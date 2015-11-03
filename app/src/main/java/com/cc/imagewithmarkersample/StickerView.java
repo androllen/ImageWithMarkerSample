@@ -93,7 +93,28 @@ public class StickerView extends View {
         mReversalVerHeight = mReversalVerBitmap.getHeight();
 
     }
-
+    /**
+     * mOriginPoints
+     * 0-------1
+     * |       |
+     * |   4   |
+     * |       |
+     * 3-------2
+     * 0-(0,0)
+     * 1-(px, 0)
+     * 2-(px,py)
+     * 3-(0,py)
+     * 4-(px / 2, py / 2)
+     *
+     * mOriginContentRect
+     * 0--------
+     * |       |
+     * |       |
+     * |       |
+     * --------1
+     * 0-(0,0)
+     * 1-(px, py)
+     */
     public void setWaterMark(@NonNull Bitmap bitmap) {
         mBitmap = bitmap;
         mStickerScaleSize = 1.0f;

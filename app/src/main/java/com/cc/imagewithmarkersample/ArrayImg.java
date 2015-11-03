@@ -27,19 +27,11 @@ import java.util.List;
 /**
  * Created by androllen on 15/10/16.
  */
-public class ArrayImg extends View {
+public class ArrayImg extends ImageView {
     private static final String TAG = "ArrayImg";
-    private ImageView mImageLt;
-    public ImageView mImage;
-    private ImageView mImageRb;
-    private RelativeLayout relativeLayout;
-    //    private String mtext;
-    private int msrclt, msrcrt, msrcrb;
-    private static final String SrcLT = "SrcLT";
-    private static final String SrcRT = "SrcRT";
-    private static final String SrcRB = "SrcRB";
-    private static final int Canvas_W = 150, Canvas_H = 150;
-    private static final int Rect_W = 100, Rect_H = 100;
+
+    private int Canvas_W = 160, Canvas_H = 160, mCanvasW = 0, mCanvasH = 0;
+    private int Rect_W = 100, Rect_H = 100;
     private Bitmap bitmap;
     private int bitmap_W, bitmap_H;
     private int LT_X = 0, LT_Y = 0;
@@ -47,9 +39,16 @@ public class ArrayImg extends View {
     private int RB_X = 100, RB_Y = 100;
     private int Bitmap_X = 25, Bitmap_Y = 25;
     private int Rect_X = 25, Rect_Y = 25;
-    private int startX, startY;
+    private int x0, y0;
+    private int StartX = 0, StartY = 0;
+    private Bitmap mRotateBitmap, mDeleteBitmap, mScaleBitmap;
+    private Paint mPaint;
+    private int mRotateWidth, mRotateHeight, mDeleteWidth, mDeleteHeight, mScaleWidth, mScaleHeight;
 
-    int x0, y0;
+    public enum Status {ACTION_NO, ACTION_MOVE, ACTION_SCALE, ACTION_ROTATE, ACTION_DELETE}
+
+    public Status mStatus;
+    private Context mContext;
 
     public ArrayImg(Context context) {
         this(context, null);
@@ -57,73 +56,222 @@ public class ArrayImg extends View {
 
     public ArrayImg(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.ctl_cpt_img_item, null);  //继承的是 View
+        mContext = context;
+        mScaleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sticker_control);
+        mScaleWidth = mScaleBitmap.getWidth();
+        mScaleHeight = mScaleBitmap.getHeight();
 
-//        View view = LayoutInflater.from(getContext()).inflate(R.layout.ctl_cpt_img_item, this, true);//RelativeLayout
+        mDeleteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sticker_delete);
+        mDeleteWidth = mDeleteBitmap.getWidth();
+        mDeleteHeight = mDeleteBitmap.getHeight();
 
-        mImageLt = (ImageView) view.findViewById(R.id.iv_lefttopid);
-        mImageRb = (ImageView) view.findViewById(R.id.iv_rightbottomid);
-
-        mImage = (ImageView) view.findViewById(R.id.iv_appicon);
-        relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_marker);
+        mRotateBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sticker_delete);
+        mRotateWidth = mRotateBitmap.getWidth();
+        mRotateHeight = mRotateBitmap.getHeight();
+        mPaint = new Paint();
 
     }
-    public static int getViewWidth(){
-        return 150;
-    }
-    public static int getViewHeight(){
-        return 150;
-    }
-    public void setWaterMark(@NonNull Bitmap bitmap) {
-        mImage.setImageBitmap(bitmap);
+
+    public void setWaterMark(@NonNull Bitmap bm) {
+        bitmap_W = bm.getWidth();
+        bitmap_H = bm.getHeight();
+
+        Canvas_W = Rect_W + mRotateWidth / 2 + mDeleteWidth / 2;
+        Canvas_H = Rect_H + mScaleHeight / 2 + mDeleteHeight / 2;
+
+        Bitmap_X = (Canvas_W - bitmap_W) / 2;
+        Bitmap_Y = (Canvas_H - bitmap_H) / 2;
+
+        if (bitmap != bm) {
+            bitmap = bm;
+        }
         postInvalidate();
     }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
     }
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        Bitmap bmp = Utils.ReadBitmapByScreenRect(mContext, bitmap, Rect_W, Rect_H);
+        canvas.drawBitmap(bmp, Bitmap_X, Bitmap_Y, mPaint);
+        bitmap_W = bitmap_H= bmp.getWidth();
+
+        mPaint.setColor(Color.GRAY);
+        mPaint.setAlpha(100);
+        canvas.drawRect(new Rect(Rect_X, Rect_Y, Rect_W + Rect_X, Rect_H + Rect_Y), mPaint);
+
+        mPaint.setAlpha(255);
+        onDrawLt(canvas, mPaint);
+        onDrawRt(canvas, mPaint);
+        onDrawRb(canvas, mPaint);
+    }
+
+    private void onDrawLt(Canvas canvas, Paint paint) {
+        canvas.drawBitmap(mDeleteBitmap, LT_X, LT_Y, paint);
+    }
+
+    private void onDrawRt(Canvas canvas, Paint paint) {
+        canvas.drawBitmap(mRotateBitmap, RT_X, RT_Y, paint);
+    }
+
+    private void onDrawRb(Canvas canvas, Paint paint) {
+        canvas.drawBitmap(mScaleBitmap, RB_X, RB_Y, paint);
+    }
+
+    private boolean isInDelete(int x, int y) {
+        int rx = Bitmap_X;
+        int ry = Rect_Y;
+        Rect rectF = new Rect(rx - mDeleteWidth / 2,
+                ry - mDeleteHeight / 2,
+                rx + mDeleteWidth / 2,
+                ry + mDeleteHeight / 2);
+        if (rectF.contains(x, y)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    private boolean isInRotater(int x, int y) {
+        int rx = Rect_W + Rect_X;
+        int ry = Rect_Y;
+        Rect rectF = new Rect(rx - mRotateWidth / 2,
+                ry - mRotateHeight / 2,
+                rx + mRotateWidth / 2,
+                ry + mRotateHeight / 2);
+        if (rectF.contains(x, y)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isInScaler(int x, int y) {
+
+        int rx = Rect_W + Rect_X;
+        int ry = Rect_H + Rect_Y;
+        Rect rectF = new Rect(rx - mScaleWidth / 2,
+                ry - mScaleHeight / 2,
+                rx + mScaleWidth / 2,
+                ry + mScaleHeight / 2);
+        if (rectF.contains(x, y)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isInMover(int x, int y) {
+        Rect rectF = new Rect(Rect_X, Rect_Y, Rect_X + Rect_W, Rect_Y + Rect_H);
+        if (rectF.contains(x, y)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
         int action = event.getAction();
-/*
+        boolean isTouch = false;
+        /*
          * (x,y)点为发生事件时的点，它的坐标值为相对于该控件左上角的距离
          */
-
         int x = (int) event.getX();
         int y = (int) event.getY();
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                if (isInDelete(x, y)) {
+                    mStatus = Status.ACTION_DELETE;
+                } else if (isInRotater(x, y)) {
+                    mStatus = Status.ACTION_ROTATE;
+                } else if (isInScaler(x, y)) {
+                    mStatus = Status.ACTION_SCALE;
+                } else if (isInMover(x, y)) {
+                    mStatus = Status.ACTION_MOVE;
+                } else {
+                    mStatus = Status.ACTION_NO;
+                }
 
-                startX = x;
-                startY = y;
+                x0 = x;
+                y0 = y;
+                isTouch = true;
                 break;
             case MotionEvent.ACTION_MOVE:
-                int l = this.getLeft();
-                int r = this.getRight();
-                int t = this.getTop();
-                int b = this.getBottom();
+                switch (mStatus) {
+                    case ACTION_MOVE:
+                        Bitmap_X += x - x0;
+                        Bitmap_Y += y - y0;
+
+                        LT_X += x - x0;
+                        LT_Y += y - y0;
+
+                        RT_X += x - x0;
+                        RT_Y += y - y0;
+
+                        RB_X += x - x0;
+                        RB_Y += y - y0;
+
+                        Rect_X += x - x0;
+                        Rect_Y += y - y0;
+
+                        x0 = x;
+                        y0 = y;
+                        isTouch = true;
+                        Log.i("move", "(" + x0 + "," + y0 + ")");
+                        invalidate();
+                        break;
+                    case ACTION_DELETE:
+                        break;
+                    case ACTION_ROTATE:
+                        break;
+                    case ACTION_SCALE:
+                        RB_X += x - x0;
+                        RB_Y += y - y0;
+
+                        Rect_W += x - x0;
+                        Rect_H += y - y0;
+
+                        RT_X += x - x0;
+
+                        Rect rect=new Rect(LT_X,LT_Y,RB_X,RB_Y);
+                        Bitmap_X= rect.centerX()-bitmap_W/2;
+                        Bitmap_Y=rect.centerY()-bitmap_H/2;
+
+//                        mCanvasW = Rect_W + mRotateWidth / 2 + mDeleteWidth / 2;
+//                        mCanvasH = Rect_H + mScaleHeight / 2 + mDeleteHeight / 2;
+//
+//
+//                        int xw=RB_X+mScaleHeight-mCanvasW;
+//                        int xh=RB_Y+mScaleHeight-mCanvasH;
+//
+//                        //重新计算图片的初始点
+//                        Bitmap_X = ( xw - bitmap_W) / 2;
+//                        Bitmap_Y = ( xh - bitmap_H) / 2;
 
 
-                int Bitmap_X = x - startX;
-                int Bitmap_Y = y - startY;
+                        x0 = x;
+                        y0 = y;
+                        invalidate();
+                        break;
+                    default:
+                        break;
+                }
 
-                int nl = l + Bitmap_X;
-                int nr = r + Bitmap_X;
-                int nt = t + Bitmap_Y;
-                int nb = b + Bitmap_Y;
-
-                this.layout(nl, nt, nr, nb);
                 break;
             case MotionEvent.ACTION_UP:
                 break;
         }
 
-        return true;
+        return isTouch;
 
     }
-
 
 }

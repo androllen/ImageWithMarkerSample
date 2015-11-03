@@ -52,7 +52,7 @@ public class ArrayView extends RelativeLayout {
     private ArrayImg addArrayImg(int drawable){
         ArrayImg myView =new ArrayImg(getContext());
         Bitmap bmp1 = Utils.ReadBitmapById(getContext(), drawable);
-        myView.mImage.setImageBitmap(bmp1);
+        //myView.setImageBitmap(bmp1);
 
         return myView;
     }
