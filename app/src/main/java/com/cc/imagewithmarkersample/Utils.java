@@ -49,7 +49,7 @@ public class Utils {
         float scale2 = (float) screenHight / h;
 
         Log.d(TAG, "getBitmap height:" +screenHight +" width:"+screenWidth);
-        // scale = scale < scale2 ? scale : scale2;
+        scale = scale < scale2 ? scale : scale2;
         // h>>1  same as (...)/2
 
         // 保证图片不变形.
@@ -58,9 +58,7 @@ public class Utils {
         return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
     }
 
-    public static Bitmap ReadBitmapByScreenRect(Context context, Bitmap bitmap,  int screenWidth,
-                                        int screenHight) {
-
+    public static Bitmap ReadBitmapByScreenRect(Bitmap bitmap,  int screenWidth,int screenHight) {
         return getBitmap(bitmap, screenWidth, screenHight);
     }
 }

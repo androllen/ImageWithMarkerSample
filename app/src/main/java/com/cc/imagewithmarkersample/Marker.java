@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Created by androllen on 15/10/16.
  */
-public class ArrayImg extends ImageView {
+public class Marker extends View {
     private static final String TAG = "ArrayImg";
 
     private int Canvas_W = 160, Canvas_H = 160, mCanvasW = 0, mCanvasH = 0;
@@ -52,11 +52,11 @@ public class ArrayImg extends ImageView {
     public Status mStatus;
     private Context mContext;
 
-    public ArrayImg(Context context) {
+    public Marker(Context context) {
         this(context, null);
     }
 
-    public ArrayImg(Context context, AttributeSet attrs) {
+    public Marker(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mScaleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sticker_control);
