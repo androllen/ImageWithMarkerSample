@@ -34,6 +34,7 @@ public class ArrayImg extends ImageView {
     private int Canvas_W = 160, Canvas_H = 160, mCanvasW = 0, mCanvasH = 0;
     private int Rect_W = 100, Rect_H = 100;
     private Bitmap bitmap;
+    private float scale=1.0f,Angle = 0.0f;
     private int bitmap_W, bitmap_H;
     private int LT_X = 0, LT_Y = 0;
     private int RT_X = 100, RT_Y = 0;
@@ -71,7 +72,8 @@ public class ArrayImg extends ImageView {
         mRotateWidth = mRotateBitmap.getWidth();
         mRotateHeight = mRotateBitmap.getHeight();
         mPaint = new Paint();
-
+        mMatrix = new Matrix();
+        mStatus = Status.ACTION_MOVE;
     }
 
     public void setWaterMark(@NonNull Bitmap bm) {
@@ -81,7 +83,7 @@ public class ArrayImg extends ImageView {
 //        Canvas_W = Rect_W + mRotateWidth / 2 + mDeleteWidth / 2;
 //        Canvas_H = Rect_H + mScaleHeight / 2 + mDeleteHeight / 2;
 
-        mMatrix = new Matrix();
+
         float transtLeft = ((float)DisplayUtil.getDisplayWidthPixels(getContext()) - bitmap_W) / 2;
         float transtTop = ((float)DisplayUtil.getDisplayWidthPixels(getContext()) - bitmap_H) / 2;
         Bitmap_X = (Rect_W - bitmap_W) / 2;
@@ -140,8 +142,28 @@ public class ArrayImg extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        canvas.drawBitmap(bitmap, mMatrix, mPaint);
+        switch (mStatus) {
+            case ACTION_NO:
+            case ACTION_MOVE:
+                canvas.drawBitmap(bitmap, mMatrix, mPaint);
+                break;
+            case ACTION_SCALE:
+                mMatrix.reset();
+                mMatrix.postScale(scale, scale);
+                Bitmap mBitQQ2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap_W,bitmap_H, mMatrix, true);
+                canvas.drawBitmap(mBitQQ2, Bitmap_X, Bitmap_Y, mPaint);
+                if (mBitQQ2 != null && !mBitQQ2.isRecycled())
+                {
+                    mBitQQ2.recycle();
+                    mBitQQ2 = null;
+                }
+                break;
+            case ACTION_ROTATE:
+                canvas.drawBitmap(bitmap, mMatrix, mPaint);
+                break;
+            default:
+                break;
+        }
 
         mPaint.setColor(Color.GRAY);
         mPaint.setAlpha(100);
@@ -301,36 +323,24 @@ public class ArrayImg extends ImageView {
 
                         RT_X += x - x0;
 
-                        //Rect rect=new Rect(LT_X,LT_Y,RB_X,RB_Y);
-
-                        int w = bitmap.getWidth();
-                        int h = bitmap.getHeight();
-                        Log.e("jj", "图片宽度" + w + ",screenWidth=" + Rect_W);
-                        float scale = (float) Rect_W / w;
-                        float scale2 = (float) Rect_H / h;
-
-                        Log.e(TAG, "getBitmap height:" + Rect_H + " width:" + Rect_W);
-                        scale = scale < scale2 ? scale : scale2;
-                        // h>>1  same as (...)/2
-
-                        // w,h是原图的属性.
-                        Bitmap bmp = Bitmap.createBitmap(bitmap, w, h, Rect_W, Rect_H);
-                        if (bitmap != null && !bitmap.equals(bmp) && !bitmap.isRecycled())
-                        {
-                            bitmap.recycle();
-                            bitmap = null;
-                        }
-                        bitmap=bmp;
-
-
                         bitmap_W = bitmap.getWidth();
                         bitmap_H = bitmap.getHeight();
 
-//        Canvas_W = Rect_W + mRotateWidth / 2 + mDeleteWidth / 2;
-//        Canvas_H = Rect_H + mScaleHeight / 2 + mDeleteHeight / 2;
-
                         Bitmap_X = (Rect_W - bitmap_W) / 2;
                         Bitmap_Y = (Rect_H - bitmap_H) / 2;
+
+
+                        scale = (float) Rect_W / bitmap_W;
+                        float scale2 = (float) Rect_H / bitmap_H;
+                        Log.e(TAG, "图片宽度=" + (Rect_W-30) + ",screenWidth=" + Rect_W);
+                        Log.e(TAG, "图片高度=" + (Rect_H-30) + ",screenHeight=" + Rect_H);
+                        scale = scale < scale2 ? scale : scale2;
+                        Log.e(TAG, "图片缩放1=" + scale+"缩放2="+scale2);
+//                      // h>>1  same as (...)/2
+
+                        //Rect rect=new Rect(LT_X,LT_Y,RB_X,RB_Y);
+//                        // w,h是原图的属性.
+//                        Bitmap bmp = Bitmap.createBitmap(bitmap, w, h, Rect_W, Rect_H);
 //                        if (bitmap != null && !bitmap.equals(bmp) && !bitmap.isRecycled())
 //                        {
 //                            bitmap.recycle();
@@ -338,16 +348,13 @@ public class ArrayImg extends ImageView {
 //                        }
 //                        bitmap=bmp;
 
+
+
+
+
+
 //                        mCanvasW = Rect_W + mRotateWidth / 2 + mDeleteWidth / 2;
 //                        mCanvasH = Rect_H + mScaleHeight / 2 + mDeleteHeight / 2;
-//
-//
-//                        int xw=RB_X+mScaleHeight-mCanvasW;
-//                        int xh=RB_Y+mScaleHeight-mCanvasH;
-//
-//                        //重新计算图片的初始点
-//                        Bitmap_X = ( xw - bitmap_W) / 2;
-//                        Bitmap_Y = ( xh - bitmap_H) / 2;
 
 
                         x0 = x;
